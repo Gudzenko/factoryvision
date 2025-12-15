@@ -95,6 +95,83 @@ source = SourceFactory.create(SourceType.VIDEO_FILE,
 
 Available types: `CAMERA`, `VIDEO_FILE`
 
+## Keypoint Detection Methods Comparison
+
+| Detector                  | Type       | Points Count | Speed      | Accuracy   | Resource Usage | Advantages                                                                                      | Disadvantages                                                      | Best Use Case                       |
+| ------------------------- | ---------- | ------------ | ---------- | ---------- | -------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------- |
+| **MediaPipe Pose**        | Body Pose  | 33           | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐   | Minimal        | ✅ Real-time optimized<br>✅ Face + body landmarks<br>✅ Very fast<br>✅ Lightweight            | ❌ Single person only<br>❌ Weaker at distance                     | Fitness, yoga, gesture control      |
+| **MediaPipe Hands**       | Hand       | 21 per hand  | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Minimal        | ✅ Excellent hand tracking<br>✅ Finger details<br>✅ Left/Right detection<br>✅ Up to 2 hands  | ❌ Requires visible hands<br>❌ Struggles with occlusion           | Sign language, hand gestures        |
+| **MediaPipe Face Mesh**   | Face       | 468          | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐ | Low            | ✅ Detailed face map<br>✅ Eyes, lips, contours<br>✅ 3D landmarks<br>✅ Refine mode available  | ⚠️ High point count<br>❌ Close-range focused                      | AR filters, face animation          |
+| **YOLO Pose**             | Body Pose  | 17           | ⭐⭐⭐     | ⭐⭐⭐⭐⭐ | Medium-High    | ✅ Multiple people<br>✅ Works at any distance<br>✅ Excellent accuracy<br>✅ Robust to occlusion | ❌ More resources<br>❌ No face details<br>⚠️ Model download (~6MB) | Crowd analysis, sports, surveillance|
+
+## Recommendations by Keypoint Scenario
+
+### Body Pose Detection
+
+| Scenario                     | Recommended Detector | Reason                                        |
+| ---------------------------- | -------------------- | --------------------------------------------- |
+| **Single Person (Close)**    | MediaPipe Pose       | Fastest, includes face landmarks              |
+| **Multiple People**          | YOLO Pose            | Only option for multi-person detection        |
+| **Fitness/Yoga Apps**        | MediaPipe Pose       | Real-time, low latency, detailed points       |
+| **Sports Analytics**         | YOLO Pose            | Works at distance, multiple athletes          |
+| **Any Distance**             | YOLO Pose            | Consistent accuracy regardless of distance    |
+
+### Hand Detection
+
+| Scenario                     | Recommended Detector | Reason                                        |
+| ---------------------------- | -------------------- | --------------------------------------------- |
+| **Hand Gestures**            | MediaPipe Hands      | Only hand detector available, excellent       |
+| **Sign Language**            | MediaPipe Hands      | Detailed finger tracking, left/right labels   |
+| **AR Hand Filters**          | MediaPipe Hands      | Real-time performance, precise landmarks      |
+
+### Face Landmark Detection
+
+| Scenario                     | Recommended Detector    | Reason                                     |
+| ---------------------------- | ----------------------- | ------------------------------------------ |
+| **Face Animation**           | MediaPipe Face Mesh     | 468 points, detailed mapping               |
+| **AR Face Filters**          | MediaPipe Face Mesh     | Eyes, lips, contours tracked precisely     |
+| **Emotion Detection**        | MediaPipe Face Mesh     | Detailed facial features                   |
+| **Basic Face Pose**          | MediaPipe Pose          | If body pose needed too (includes 5 face)  |
+
+## Switching Between Keypoint Detectors
+
+All keypoint detectors implement a common interface through `KeypointDetectorFactory`:
+
+```python
+from pose_hand_detectors import KeypointDetectorFactory, KeypointDetectorType
+
+# Body pose detection (33 landmarks)
+detector = KeypointDetectorFactory.create(
+    KeypointDetectorType.MEDIAPIPE_POSE, 
+    logger=logger, 
+    model_complexity=1
+)
+
+# Hand detection (up to 2 hands, 21 points each)
+detector = KeypointDetectorFactory.create(
+    KeypointDetectorType.MEDIAPIPE_HANDS, 
+    logger=logger, 
+    max_num_hands=2
+)
+
+# Face mesh (468 landmarks)
+detector = KeypointDetectorFactory.create(
+    KeypointDetectorType.MEDIAPIPE_FACE_MESH, 
+    logger=logger, 
+    max_num_faces=1,
+    refine_landmarks=True
+)
+
+# YOLO Pose (17 COCO keypoints, multiple people)
+detector = KeypointDetectorFactory.create(
+    KeypointDetectorType.YOLO_POSE, 
+    logger=logger, 
+    model_name='yolo11n-pose.pt'
+)
+```
+
+Available types: `MEDIAPIPE_POSE`, `MEDIAPIPE_HANDS`, `MEDIAPIPE_FACE_MESH`, `YOLO_POSE`
+
 ## License
 
 See LICENSE file for details.

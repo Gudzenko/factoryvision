@@ -1,5 +1,6 @@
-from utils import SourceFactory, SourceType, WindowDisplay, DetectionDrawer
+from utils import SourceFactory, SourceType, WindowDisplay, UniversalDrawer
 from face_body_detectors import DetectorFactory, DetectorType
+from pose_hand_detectors import KeypointDetectorFactory, KeypointDetectorType
 import cv2
 import logging
 
@@ -7,24 +8,37 @@ import logging
 class FactoryVisionApp:
     def __init__(self, window_name="FactoryVision Demo", is_flip=False, logger=None):
         self.source = SourceFactory.create(
-            SourceType.VIDEO_FILE, 
-            video_path="assets/videos/dance.mp4", 
-            loop=True, 
+            source_type=SourceType.CAMERA,
             logger=logger,
-            realtime=False,
         )
         self.window = WindowDisplay(window_name)
         
-        self.detector = DetectorFactory.create(DetectorType.YOLO, logger=logger, target_classes=[0])
-        self.drawer = DetectionDrawer(label_text="Person")
+        self.face_detector = DetectorFactory.create(
+            detector_type=DetectorType.YOLO,
+            logger=logger,
+            target_classes=[0],
+        )
+        self.keypoint_detector = KeypointDetectorFactory.create(
+            detector_type=KeypointDetectorType.MEDIAPIPE_FACE_MESH,
+            logger=logger,
+        )
+        self.drawer = UniversalDrawer()
+        
         self.is_flip = is_flip
 
     def process_frame(self, frame):
         if self.is_flip:
             frame = cv2.flip(frame, 1)
         
-        detections = self.detector.detect(frame)
-        frame = self.drawer.draw(frame, detections)
+        face_detections = self.face_detector.detect(frame)
+        keypoint_detections = self.keypoint_detector.detect(frame)
+        
+        frame = self.drawer.draw_all(
+            frame=frame, 
+            box_detections=face_detections,
+            keypoint_detections=keypoint_detections,
+            label_text="Face",
+        )
         
         return frame
 
