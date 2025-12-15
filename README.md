@@ -53,6 +53,48 @@ detector = DetectorFactory.create(DetectorType.HAAR_CASCADE, logger=logger)
 
 Available types: `HAAR_CASCADE`, `DNN_FACE`, `YOLO`, `MEDIAPIPE`
 
+## Switching Between Video Sources
+
+The application supports both live camera feed and video file playback through `SourceFactory`. Switch between sources easily:
+
+```python
+from utils import SourceFactory, SourceType
+
+# Live camera (default camera ID 0)
+source = SourceFactory.create(SourceType.CAMERA)
+
+# Specific camera ID
+source = SourceFactory.create(SourceType.CAMERA, camera_id=1, logger=logger)
+
+# Video file - fast mode (no delay)
+source = SourceFactory.create(SourceType.VIDEO_FILE, 
+                             video_path="video.mp4", 
+                             loop=True, 
+                             realtime=False)
+
+# Video file - realtime mode (with FPS delay)
+source = SourceFactory.create(SourceType.VIDEO_FILE, 
+                             video_path="video.mp4", 
+                             loop=True, 
+                             realtime=True, 
+                             logger=logger)
+
+# Video file - custom speed (0.8 = 20% faster)
+source = SourceFactory.create(SourceType.VIDEO_FILE, 
+                             video_path="video.mp4", 
+                             loop=True, 
+                             realtime=True, 
+                             speed_factor=0.8, 
+                             logger=logger)
+```
+
+**Parameters:**
+- `loop` — restart video from beginning when finished (default: True)
+- `realtime` — playback with original FPS timing (default: False)
+- `speed_factor` — speed multiplier: 1.0=normal, 0.5=2x faster, 2.0=2x slower (default: 1.0)
+
+Available types: `CAMERA`, `VIDEO_FILE`
+
 ## License
 
 See LICENSE file for details.
