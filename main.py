@@ -4,12 +4,14 @@ import cv2
 
 
 class FactoryVisionApp:
-    def __init__(self, window_name="FactoryVision Demo"):
+    def __init__(self, window_name="FactoryVision Demo", is_flip=False):
         self.camera = CameraStream()
         self.window = WindowDisplay(window_name)
+        self.is_flip = is_flip
 
     def process_frame(self, frame):
-        frame = cv2.flip(frame, 1)
+        if self.is_flip:
+            frame = cv2.flip(frame, 1)
         return frame
 
     def run(self):
@@ -30,5 +32,5 @@ class FactoryVisionApp:
 
 
 if __name__ == "__main__":
-    app = FactoryVisionApp()
+    app = FactoryVisionApp(is_flip=True)
     app.run()
