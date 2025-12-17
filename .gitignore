@@ -229,7 +229,6 @@ __marimo__/
 # Images
 *.jpg
 *.jpeg
-*.png
 *.gif
 *.bmp
 *.tiff
