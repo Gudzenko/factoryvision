@@ -1,13 +1,57 @@
 # FactoryVision
 
-Computer vision application for face and person detection using multiple detection methods.
+Computer vision application for face and person detection using multiple detection methods with real-time AR face effects.
+
+## Installation
+
+### Prerequisites
+
+- Python 3.8 or higher
+- Webcam (for camera-based demos)
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd factoryvision
+```
+
+2. Create virtual environment (recommended):
+```bash
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### Quick Start
+
+**Run main detection demo:**
+```bash
+python main.py
+```
+
+**Run AR face effects demo:**
+```bash
+python face_ar_demo.py
+```
+
+Press `ESC` to exit any demo.
 
 ## Features
 
 - Multiple camera support
 - Real-time detection and visualization
 - Pluggable detector architecture
-- Four different detection methods
+- Multiple detection methods (face, body, pose, hands)
+- AR face effects with real-time tracking
 
 ## Detection Methods Comparison
 
