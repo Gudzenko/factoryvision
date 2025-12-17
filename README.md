@@ -172,6 +172,100 @@ detector = KeypointDetectorFactory.create(
 
 Available types: `MEDIAPIPE_POSE`, `MEDIAPIPE_HANDS`, `MEDIAPIPE_FACE_MESH`, `YOLO_POSE`
 
+## AR Face Effects
+
+The application includes real-time AR effects that can be applied to detected faces using MediaPipe Face Mesh (468 landmarks). Effects automatically track face position, rotation, and scale.
+
+### Available Effects
+
+| Effect               | Description                                    | Key Parameters                                          | Use Case                           |
+| -------------------- | ---------------------------------------------- | ------------------------------------------------------- | ---------------------------------- |
+| **GlassesEffect**    | Sunglasses or eyewear overlay                  | `scale_factor` (default: 1.8)                           | Fun filters, accessories           |
+| **HatEffect**        | Hat or headwear positioned above forehead      | `scale_factor` (2.2), `x_offset` (0.0), `y_offset` (-0.5) | Holiday themes, costume effects    |
+| **FullFaceMaskEffect** | Full face mask (beard, hat, entire face overlay) | `scale_factor` (2.5), `x_offset` (0.0), `y_offset` (0.0) | Character transformations, themes  |
+| **FrameEffect**      | Decorative border around entire frame          | None (auto-scales to frame size)                        | Photo booth, branding              |
+
+### Effect Features
+
+All face-tracking effects include:
+- ✅ **Automatic rotation** — follows head tilt and turns
+- ✅ **Precise positioning** — tracks facial landmarks in real-time
+- ✅ **No clipping** — rotated images expand canvas to prevent cutoff
+- ✅ **Alpha blending** — smooth transparency overlay
+- ✅ **Adjustable offsets** — fine-tune position with x/y parameters
+
+### Using AR Effects
+
+Effects can be combined and applied in sequence:
+
+```python
+from ar_effects import GlassesEffect, HatEffect, FullFaceMaskEffect, FrameEffect
+from pose_hand_detectors import KeypointDetectorFactory, KeypointDetectorType
+
+# Initialize face detector
+face_detector = KeypointDetectorFactory.create(
+    KeypointDetectorType.MEDIAPIPE_FACE_MESH,
+    max_num_faces=1,
+    refine_landmarks=True
+)
+
+# Create effect pipeline
+effects = [
+    FrameEffect("assets/images/frame.png"),
+    GlassesEffect("assets/images/glasses.png", scale_factor=1.8),
+    HatEffect("assets/images/hat.png", scale_factor=2.2, x_offset=0.0, y_offset=-0.5),
+]
+
+# Apply effects
+face_detections = face_detector.detect(frame)
+for effect in effects:
+    frame = effect.apply(frame, face_detections)
+```
+
+### Parameter Guide
+
+**Scale Factor:**
+- Controls size relative to face/frame
+- `< 1.0` — smaller
+- `1.0` — same size as reference measurement
+- `> 1.0` — larger (typical: 1.5-2.5)
+
+**X Offset:**
+- Horizontal shift along face orientation
+- `0.0` — centered (default)
+- `> 0` — shift right (relative to face)
+- `< 0` — shift left
+
+**Y Offset:**
+- Vertical shift perpendicular to face orientation
+- `0.0` — centered on reference point
+- `> 0` — shift down
+- `< 0` — shift up (typical for hats: -0.3 to -0.7)
+
+### Creating Custom Effects
+
+Extend `BaseAREffect` to create your own:
+
+```python
+from ar_effects import BaseAREffect
+import cv2
+import numpy as np
+
+class CustomEffect(BaseAREffect):
+    def __init__(self, image_path, **kwargs):
+        self.img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+    
+    def apply(self, frame, detections):
+        # Your effect logic here
+        return frame
+```
+
+All effects receive face detections with 468 MediaPipe Face Mesh landmarks. Key landmark indices:
+- Eyes: `33, 133, 362, 263`
+- Forehead: `10, 151`
+- Temples: `234, 454`
+- Chin: `152`
+
 ## License
 
 See LICENSE file for details.
