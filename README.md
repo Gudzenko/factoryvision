@@ -48,6 +48,18 @@ python main.py
 python face_ar_demo.py
 ```
 
+**Run background segmentation demo:**
+
+```bash
+python segmentation_demo.py
+```
+
+**Run style effects demo:**
+
+```bash
+python style_effects_demo.py
+```
+
 Press `ESC` to exit any demo.
 
 ## Features
@@ -57,6 +69,8 @@ Press `ESC` to exit any demo.
 - Pluggable detector architecture
 - Multiple detection methods (face, body, pose, hands)
 - AR face effects with real-time tracking
+- Background segmentation and replacement
+- Style transformation effects (cartoon, sketch, edge detection)
 
 ## Detection Methods Comparison
 
@@ -434,6 +448,148 @@ Edit `BACKGROUND_PATH` in `segmentation_demo.py` to change virtual background im
 - Lower (0.3-0.4): Captures more details, may include background
 - Default (0.5): Balanced
 - Higher (0.6-0.7): Cleaner edges, may lose details
+
+---
+
+## Style Effects
+
+Transform video frames into artistic styles in real-time. All effects support real-time camera streaming with instant switching between effects.
+
+### Available Effects
+
+#### 1. Canny Edge Effect
+
+**Description:** Classic edge detection creating clean contour lines.
+
+**Parameters:**
+
+- `threshold1` (default: 100) — Lower threshold for edge detection (20-120)
+- `threshold2` (default: 150) — Upper threshold for edge detection (60-250, typically 2-3× threshold1)
+- `invert` (default: True) — Black lines on white background (False: white lines on black)
+
+**Best for:** Technical drawings, contour art, minimalist style
+
+**Tips:**
+
+- Lower thresholds → more detailed lines
+- Higher thresholds → only strong edges
+- threshold2 = threshold1 × 2.5-3.0 for good results
+
+---
+
+#### 2. Pencil Sketch Effect
+
+**Description:** Creates pencil drawing appearance with natural sketch lines.
+
+**Parameters:**
+
+- `sigma_s` (default: 75) — Filter size, controls detail level (10-100)
+- `sigma_r` (default: 0.07) — Contrast threshold for edges (0.01-0.15)
+- `shade_factor` (default: 0.1) — Shading intensity (0.01-0.1)
+
+**Best for:** Artistic sketches, portrait drawings
+
+**Tips:**
+
+- Lower sigma_s → cleaner lines, less blur
+- Lower sigma_r → sharper contours
+- Lower shade_factor → minimal shading, more line focus
+
+---
+
+#### 3. Cartoon Effect
+
+**Description:** Transforms video into cartoon-like appearance with simplified colors and bold outlines.
+
+**Parameters:**
+
+- `d` (default: 5) — Bilateral filter diameter (5-15)
+- `sigma_color` (default: 30) — Color filtering strength (10-150)
+- `sigma_space` (default: 30) — Spatial filtering strength (10-150)
+
+**Best for:** Animation style, comic book look
+
+**Tips:**
+
+- Higher d, sigma_color, sigma_space → flatter color areas (more cartoonish)
+- Lower values → preserve more details
+- sigma_color = sigma_space for balanced results
+
+---
+
+#### 4. Adaptive Threshold Effect
+
+**Description:** Creates high-contrast black-and-white manga/comic style.
+
+**Parameters:**
+
+- `block_size` (default: 11) — Size of neighborhood area (odd number, 5-25)
+- `C` (default: 2) — Constant subtracted from mean (0-10)
+- `method` (default: MEAN_C) — ADAPTIVE_THRESH_MEAN_C or ADAPTIVE_THRESH_GAUSSIAN_C
+- `invert` (default: False) — Black lines on white (True: white lines on black)
+
+**Best for:** Manga, comic books, high-contrast art
+
+**Tips:**
+
+- Larger block_size → coarser, simpler result
+- Higher C → fewer black lines (lighter overall)
+- MEAN_C faster, GAUSSIAN_C smoother
+
+---
+
+#### 5. Oil Painting Effect
+
+**Description:** Simulates oil painting with brush strokes and color blending.
+
+**Parameters:**
+
+- `size` (default: 7) — Brush size/stroke size (1-10)
+- `dynRatio` (default: 1) — Dynamic range intensity (1-3)
+
+**Best for:** Artistic painting style, impressionism
+
+**Tips:**
+
+- Larger size → bigger, more visible brush strokes
+- Requires opencv-contrib-python for best quality
+- Falls back to bilateral filter + quantization if xphoto unavailable
+
+---
+
+### Running Style Effects Demo
+
+```bash
+python style_effects_demo.py
+```
+
+**Controls:**
+
+- `0` — Show original frame (no effect)
+- `1` — Canny Edge Effect
+- `2` — Pencil Sketch Effect
+- `3` — Cartoon Effect
+- `4` — Adaptive Threshold Effect
+- `5` — Oil Painting Effect
+- `ESC` — Exit
+
+**Performance:**
+All effects run in real-time (30+ FPS) on modern hardware. Effects 1-2 (edge detection) are fastest, effect 5 (oil painting) is most computationally intensive.
+
+**Customization:**
+Edit effect parameters in `style_effects_demo.py` to fine-tune visual output:
+
+```python
+_effects = [
+    CannyEdgeEffect(threshold1=100, threshold2=150, invert=True),
+    PencilSketchEffect(sigma_s=75, sigma_r=0.07, shade_factor=0.1),
+    CartoonEffect(d=5, sigma_color=30, sigma_space=30),
+    AdaptiveThresholdEffect(block_size=11, C=2),
+    OilPaintingEffect(size=7, dynRatio=1),
+]
+```
+
+---
 
 ## License
 
