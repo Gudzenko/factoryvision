@@ -60,6 +60,12 @@ python segmentation_demo.py
 python style_effects_demo.py
 ```
 
+**Run face contour demo:**
+
+```bash
+python face_contour_demo.py
+```
+
 Press `ESC` to exit any demo.
 
 ## Features
@@ -587,6 +593,40 @@ _effects = [
     AdaptiveThresholdEffect(block_size=11, C=2),
     OilPaintingEffect(size=7, dynRatio=1),
 ]
+```
+
+---
+
+## Face Contour Detection Demo
+
+Combines person segmentation, bilateral filtering, and adaptive thresholding to extract clean facial contours.
+
+### Key Techniques
+
+**Bilateral Filter** - Removes texture/noise while preserving edges  
+**Person Segmentation** - MediaPipe Selfie Segmentation (landscape mode)  
+**Morphological Operations** - Cleans mask (MORPH_CLOSE + MORPH_OPEN)  
+**Adaptive Threshold** - Block-based contour detection  
+**Mask Composition** - Shows contours only on person, white background elsewhere
+
+### Running
+
+```bash
+python face_contour_demo.py
+```
+
+### Configuration
+
+Edit parameters in `face_contour_demo.py`:
+
+```python
+AdaptiveThresholdEffect(
+    block_size=9,      # Neighborhood size (odd number)
+    C=3,               # Threshold adjustment (lower = more lines)
+    method=cv2.ADAPTIVE_THRESH_MEAN_C
+)
+
+cv2.bilateralFilter(frame, d=9, sigmaColor=75, sigmaSpace=75)
 ```
 
 ---
