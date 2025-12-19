@@ -227,8 +227,6 @@ __marimo__/
 *.m4a
 
 # Images
-*.jpg
-*.jpeg
 *.gif
 *.bmp
 *.tiff

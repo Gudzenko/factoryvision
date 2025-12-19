@@ -12,12 +12,14 @@ Computer vision application for face and person detection using multiple detecti
 ### Setup
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd factoryvision
 ```
 
 2. Create virtual environment (recommended):
+
 ```bash
 python -m venv venv
 # Windows
@@ -27,6 +29,7 @@ source venv/bin/activate
 ```
 
 3. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -34,11 +37,13 @@ pip install -r requirements.txt
 ### Quick Start
 
 **Run main detection demo:**
+
 ```bash
 python main.py
 ```
 
 **Run AR face effects demo:**
+
 ```bash
 python face_ar_demo.py
 ```
@@ -111,28 +116,29 @@ source = SourceFactory.create(SourceType.CAMERA)
 source = SourceFactory.create(SourceType.CAMERA, camera_id=1, logger=logger)
 
 # Video file - fast mode (no delay)
-source = SourceFactory.create(SourceType.VIDEO_FILE, 
-                             video_path="video.mp4", 
-                             loop=True, 
+source = SourceFactory.create(SourceType.VIDEO_FILE,
+                             video_path="video.mp4",
+                             loop=True,
                              realtime=False)
 
 # Video file - realtime mode (with FPS delay)
-source = SourceFactory.create(SourceType.VIDEO_FILE, 
-                             video_path="video.mp4", 
-                             loop=True, 
-                             realtime=True, 
+source = SourceFactory.create(SourceType.VIDEO_FILE,
+                             video_path="video.mp4",
+                             loop=True,
+                             realtime=True,
                              logger=logger)
 
 # Video file - custom speed (0.8 = 20% faster)
-source = SourceFactory.create(SourceType.VIDEO_FILE, 
-                             video_path="video.mp4", 
-                             loop=True, 
-                             realtime=True, 
-                             speed_factor=0.8, 
+source = SourceFactory.create(SourceType.VIDEO_FILE,
+                             video_path="video.mp4",
+                             loop=True,
+                             realtime=True,
+                             speed_factor=0.8,
                              logger=logger)
 ```
 
 **Parameters:**
+
 - `loop` — restart video from beginning when finished (default: True)
 - `realtime` — playback with original FPS timing (default: False)
 - `speed_factor` — speed multiplier: 1.0=normal, 0.5=2x faster, 2.0=2x slower (default: 1.0)
@@ -141,41 +147,41 @@ Available types: `CAMERA`, `VIDEO_FILE`
 
 ## Keypoint Detection Methods Comparison
 
-| Detector                  | Type       | Points Count | Speed      | Accuracy   | Resource Usage | Advantages                                                                                      | Disadvantages                                                      | Best Use Case                       |
-| ------------------------- | ---------- | ------------ | ---------- | ---------- | -------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------------- |
-| **MediaPipe Pose**        | Body Pose  | 33           | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐   | Minimal        | ✅ Real-time optimized<br>✅ Face + body landmarks<br>✅ Very fast<br>✅ Lightweight            | ❌ Single person only<br>❌ Weaker at distance                     | Fitness, yoga, gesture control      |
-| **MediaPipe Hands**       | Hand       | 21 per hand  | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Minimal        | ✅ Excellent hand tracking<br>✅ Finger details<br>✅ Left/Right detection<br>✅ Up to 2 hands  | ❌ Requires visible hands<br>❌ Struggles with occlusion           | Sign language, hand gestures        |
-| **MediaPipe Face Mesh**   | Face       | 468          | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐ | Low            | ✅ Detailed face map<br>✅ Eyes, lips, contours<br>✅ 3D landmarks<br>✅ Refine mode available  | ⚠️ High point count<br>❌ Close-range focused                      | AR filters, face animation          |
-| **YOLO Pose**             | Body Pose  | 17           | ⭐⭐⭐     | ⭐⭐⭐⭐⭐ | Medium-High    | ✅ Multiple people<br>✅ Works at any distance<br>✅ Excellent accuracy<br>✅ Robust to occlusion | ❌ More resources<br>❌ No face details<br>⚠️ Model download (~6MB) | Crowd analysis, sports, surveillance|
+| Detector                | Type      | Points Count | Speed      | Accuracy   | Resource Usage | Advantages                                                                                        | Disadvantages                                                       | Best Use Case                        |
+| ----------------------- | --------- | ------------ | ---------- | ---------- | -------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------ |
+| **MediaPipe Pose**      | Body Pose | 33           | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐   | Minimal        | ✅ Real-time optimized<br>✅ Face + body landmarks<br>✅ Very fast<br>✅ Lightweight              | ❌ Single person only<br>❌ Weaker at distance                      | Fitness, yoga, gesture control       |
+| **MediaPipe Hands**     | Hand      | 21 per hand  | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Minimal        | ✅ Excellent hand tracking<br>✅ Finger details<br>✅ Left/Right detection<br>✅ Up to 2 hands    | ❌ Requires visible hands<br>❌ Struggles with occlusion            | Sign language, hand gestures         |
+| **MediaPipe Face Mesh** | Face      | 468          | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐ | Low            | ✅ Detailed face map<br>✅ Eyes, lips, contours<br>✅ 3D landmarks<br>✅ Refine mode available    | ⚠️ High point count<br>❌ Close-range focused                       | AR filters, face animation           |
+| **YOLO Pose**           | Body Pose | 17           | ⭐⭐⭐     | ⭐⭐⭐⭐⭐ | Medium-High    | ✅ Multiple people<br>✅ Works at any distance<br>✅ Excellent accuracy<br>✅ Robust to occlusion | ❌ More resources<br>❌ No face details<br>⚠️ Model download (~6MB) | Crowd analysis, sports, surveillance |
 
 ## Recommendations by Keypoint Scenario
 
 ### Body Pose Detection
 
-| Scenario                     | Recommended Detector | Reason                                        |
-| ---------------------------- | -------------------- | --------------------------------------------- |
-| **Single Person (Close)**    | MediaPipe Pose       | Fastest, includes face landmarks              |
-| **Multiple People**          | YOLO Pose            | Only option for multi-person detection        |
-| **Fitness/Yoga Apps**        | MediaPipe Pose       | Real-time, low latency, detailed points       |
-| **Sports Analytics**         | YOLO Pose            | Works at distance, multiple athletes          |
-| **Any Distance**             | YOLO Pose            | Consistent accuracy regardless of distance    |
+| Scenario                  | Recommended Detector | Reason                                     |
+| ------------------------- | -------------------- | ------------------------------------------ |
+| **Single Person (Close)** | MediaPipe Pose       | Fastest, includes face landmarks           |
+| **Multiple People**       | YOLO Pose            | Only option for multi-person detection     |
+| **Fitness/Yoga Apps**     | MediaPipe Pose       | Real-time, low latency, detailed points    |
+| **Sports Analytics**      | YOLO Pose            | Works at distance, multiple athletes       |
+| **Any Distance**          | YOLO Pose            | Consistent accuracy regardless of distance |
 
 ### Hand Detection
 
-| Scenario                     | Recommended Detector | Reason                                        |
-| ---------------------------- | -------------------- | --------------------------------------------- |
-| **Hand Gestures**            | MediaPipe Hands      | Only hand detector available, excellent       |
-| **Sign Language**            | MediaPipe Hands      | Detailed finger tracking, left/right labels   |
-| **AR Hand Filters**          | MediaPipe Hands      | Real-time performance, precise landmarks      |
+| Scenario            | Recommended Detector | Reason                                      |
+| ------------------- | -------------------- | ------------------------------------------- |
+| **Hand Gestures**   | MediaPipe Hands      | Only hand detector available, excellent     |
+| **Sign Language**   | MediaPipe Hands      | Detailed finger tracking, left/right labels |
+| **AR Hand Filters** | MediaPipe Hands      | Real-time performance, precise landmarks    |
 
 ### Face Landmark Detection
 
-| Scenario                     | Recommended Detector    | Reason                                     |
-| ---------------------------- | ----------------------- | ------------------------------------------ |
-| **Face Animation**           | MediaPipe Face Mesh     | 468 points, detailed mapping               |
-| **AR Face Filters**          | MediaPipe Face Mesh     | Eyes, lips, contours tracked precisely     |
-| **Emotion Detection**        | MediaPipe Face Mesh     | Detailed facial features                   |
-| **Basic Face Pose**          | MediaPipe Pose          | If body pose needed too (includes 5 face)  |
+| Scenario              | Recommended Detector | Reason                                    |
+| --------------------- | -------------------- | ----------------------------------------- |
+| **Face Animation**    | MediaPipe Face Mesh  | 468 points, detailed mapping              |
+| **AR Face Filters**   | MediaPipe Face Mesh  | Eyes, lips, contours tracked precisely    |
+| **Emotion Detection** | MediaPipe Face Mesh  | Detailed facial features                  |
+| **Basic Face Pose**   | MediaPipe Pose       | If body pose needed too (includes 5 face) |
 
 ## Switching Between Keypoint Detectors
 
@@ -186,30 +192,30 @@ from pose_hand_detectors import KeypointDetectorFactory, KeypointDetectorType
 
 # Body pose detection (33 landmarks)
 detector = KeypointDetectorFactory.create(
-    KeypointDetectorType.MEDIAPIPE_POSE, 
-    logger=logger, 
+    KeypointDetectorType.MEDIAPIPE_POSE,
+    logger=logger,
     model_complexity=1
 )
 
 # Hand detection (up to 2 hands, 21 points each)
 detector = KeypointDetectorFactory.create(
-    KeypointDetectorType.MEDIAPIPE_HANDS, 
-    logger=logger, 
+    KeypointDetectorType.MEDIAPIPE_HANDS,
+    logger=logger,
     max_num_hands=2
 )
 
 # Face mesh (468 landmarks)
 detector = KeypointDetectorFactory.create(
-    KeypointDetectorType.MEDIAPIPE_FACE_MESH, 
-    logger=logger, 
+    KeypointDetectorType.MEDIAPIPE_FACE_MESH,
+    logger=logger,
     max_num_faces=1,
     refine_landmarks=True
 )
 
 # YOLO Pose (17 COCO keypoints, multiple people)
 detector = KeypointDetectorFactory.create(
-    KeypointDetectorType.YOLO_POSE, 
-    logger=logger, 
+    KeypointDetectorType.YOLO_POSE,
+    logger=logger,
     model_name='yolo11n-pose.pt'
 )
 ```
@@ -222,16 +228,17 @@ The application includes real-time AR effects that can be applied to detected fa
 
 ### Available Effects
 
-| Effect               | Description                                    | Key Parameters                                          | Use Case                           |
-| -------------------- | ---------------------------------------------- | ------------------------------------------------------- | ---------------------------------- |
-| **GlassesEffect**    | Sunglasses or eyewear overlay                  | `scale_factor` (default: 1.8)                           | Fun filters, accessories           |
-| **HatEffect**        | Hat or headwear positioned above forehead      | `scale_factor` (2.2), `x_offset` (0.0), `y_offset` (-0.5) | Holiday themes, costume effects    |
-| **FullFaceMaskEffect** | Full face mask (beard, hat, entire face overlay) | `scale_factor` (2.5), `x_offset` (0.0), `y_offset` (0.0) | Character transformations, themes  |
-| **FrameEffect**      | Decorative border around entire frame          | None (auto-scales to frame size)                        | Photo booth, branding              |
+| Effect                 | Description                                      | Key Parameters                                            | Use Case                          |
+| ---------------------- | ------------------------------------------------ | --------------------------------------------------------- | --------------------------------- |
+| **GlassesEffect**      | Sunglasses or eyewear overlay                    | `scale_factor` (default: 1.8)                             | Fun filters, accessories          |
+| **HatEffect**          | Hat or headwear positioned above forehead        | `scale_factor` (2.2), `x_offset` (0.0), `y_offset` (-0.5) | Holiday themes, costume effects   |
+| **FullFaceMaskEffect** | Full face mask (beard, hat, entire face overlay) | `scale_factor` (2.5), `x_offset` (0.0), `y_offset` (0.0)  | Character transformations, themes |
+| **FrameEffect**        | Decorative border around entire frame            | None (auto-scales to frame size)                          | Photo booth, branding             |
 
 ### Effect Features
 
 All face-tracking effects include:
+
 - ✅ **Automatic rotation** — follows head tilt and turns
 - ✅ **Precise positioning** — tracks facial landmarks in real-time
 - ✅ **No clipping** — rotated images expand canvas to prevent cutoff
@@ -269,18 +276,21 @@ for effect in effects:
 ### Parameter Guide
 
 **Scale Factor:**
+
 - Controls size relative to face/frame
 - `< 1.0` — smaller
 - `1.0` — same size as reference measurement
 - `> 1.0` — larger (typical: 1.5-2.5)
 
 **X Offset:**
+
 - Horizontal shift along face orientation
 - `0.0` — centered (default)
 - `> 0` — shift right (relative to face)
 - `< 0` — shift left
 
 **Y Offset:**
+
 - Vertical shift perpendicular to face orientation
 - `0.0` — centered on reference point
 - `> 0` — shift down
@@ -298,17 +308,132 @@ import numpy as np
 class CustomEffect(BaseAREffect):
     def __init__(self, image_path, **kwargs):
         self.img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
-    
+
     def apply(self, frame, detections):
         # Your effect logic here
         return frame
 ```
 
 All effects receive face detections with 468 MediaPipe Face Mesh landmarks. Key landmark indices:
+
 - Eyes: `33, 133, 362, 263`
 - Forehead: `10, 151`
 - Temples: `234, 454`
 - Chin: `152`
+
+## Background Effects
+
+Real-time background replacement and segmentation using MediaPipe Selfie Segmentation. Automatically separates person from background for virtual background effects similar to video conferencing apps.
+
+### Person Segmentation
+
+**PersonSegmentation** class provides accurate person detection and masking:
+
+```python
+from background_effects import PersonSegmentation
+
+# Initialize segmentation (model_selection: 0=general, 1=landscape/webcam)
+segmentation = PersonSegmentation(model_selection=1, logger=logger)
+
+# Get soft mask (0.0-1.0 float values)
+mask = segmentation.get_mask(frame)
+
+# Get binary mask (0 or 255)
+binary_mask = segmentation.get_binary_mask(frame, threshold=0.5)
+
+# Get contours (list of contour points)
+contours = segmentation.get_contours(frame, threshold=0.5)
+
+# Visualize mask overlay
+result = segmentation.visualize_mask(frame, mask_color=(0, 255, 0), alpha=0.5)
+
+# Visualize contours
+result = segmentation.visualize_contours(frame, contour_color=(0, 255, 0), thickness=2)
+```
+
+**Key Features:**
+
+- ✅ Real-time performance (30-60 FPS on CPU)
+- ✅ Accurate edge detection (hair, clothing details)
+- ✅ Two model modes (general/landscape)
+- ✅ Soft masks for smooth blending
+
+### Background Replacement
+
+**BackgroundReplacementEffect** replaces background with custom image:
+
+```python
+from background_effects import PersonSegmentation, BackgroundReplacementEffect
+
+# Initialize
+segmentation = PersonSegmentation(model_selection=1)
+bg_effect = BackgroundReplacementEffect("assets/images/background.jpg")
+
+# Apply replacement
+mask = segmentation.get_mask(frame)
+result = bg_effect.apply(frame, mask)
+```
+
+**How it works:**
+
+1. Segmentation creates mask (person=1.0, background=0.0)
+2. Background image is resized to match frame size
+3. Blending formula: `result = frame × mask + background × (1 - mask)`
+4. Person pixels kept, background pixels replaced
+
+**Use Cases:**
+
+- 📹 Virtual backgrounds for video calls
+- 🎬 Green screen effects without green screen
+- 🖼️ Custom photo backgrounds
+- 🎨 Creative video filters
+
+### Segmentation Demo
+
+Run interactive demo with multiple visualization modes:
+
+```bash
+python segmentation_demo.py
+```
+
+**Controls:**
+
+- `1` — Grayscale mask (shows segmentation confidence)
+- `2` — Colored overlay (green highlight on person)
+- `3` — Binary mask (black/white threshold)
+- `4` — Contours (edge detection)
+- `5` — Background replacement (virtual background)
+- `0` — Original frame
+- `ESC` — Exit
+
+**Configuration:**
+Edit `BACKGROUND_PATH` in `segmentation_demo.py` to change virtual background image.
+
+### Model Selection
+
+| Mode              | Resolution | Speed      | Best For                                  |
+| ----------------- | ---------- | ---------- | ----------------------------------------- |
+| **0 (General)**   | 256×256    | ⭐⭐⭐     | General purpose, any distance             |
+| **1 (Landscape)** | 144×256    | ⭐⭐⭐⭐⭐ | Webcam, selfie, close-range (recommended) |
+
+### Tips for Best Results
+
+**Lighting:**
+
+- Even lighting on person and background
+- Avoid strong backlighting (silhouettes)
+- Minimize shadows
+
+**Distance:**
+
+- Works best 0.5-2 meters from camera
+- Landscape mode optimized for webcam distance
+
+**Threshold tuning:**
+
+- Lower (0.3-0.4): Captures more details, may include background
+- Default (0.5): Balanced
+- Higher (0.6-0.7): Cleaner edges, may lose details
 
 ## License
 
