@@ -631,6 +631,44 @@ cv2.bilateralFilter(frame, d=9, sigmaColor=75, sigmaSpace=75)
 
 ---
 
+## Caricature Generator
+
+AI-based caricature generation using Stable Diffusion XL + LoRA adapter.
+
+### Installation
+
+```bash
+pip install diffusers transformers accelerate safetensors peft pillow torch
+```
+
+### Usage
+
+```python
+from caricature_generator import CaricatureGenerator
+import cv2
+
+generator = CaricatureGenerator(device='cpu', lora_weight=0.9)
+
+image = cv2.imread('assets/images/photo1.jpg')
+result = generator.generate(
+    image,
+    prompt="caricature style, big head, exaggerated features",
+    strength=0.75
+)
+
+cv2.imwrite('assets/images/result.jpg', result)
+```
+
+### Running Demo
+
+```bash
+python caricature_demo.py
+```
+
+**Note:** First run downloads ~6GB model.
+
+---
+
 ## License
 
 See LICENSE file for details.
