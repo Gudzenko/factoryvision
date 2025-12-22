@@ -669,6 +669,37 @@ python caricature_demo.py
 
 ---
 
+## HandGestureRecognizer API
+
+### Class: `HandGestureRecognizer`
+
+A class for hand gesture recognition using the Hugging Face model `prithivMLmods/Hand-Gesture-19`.
+
+#### Initialization
+
+```python
+recognizer = HandGestureRecognizer(device='cpu', confidence_threshold=0.5)
+```
+
+- `device` (str): Device for inference, either 'cpu' or 'cuda'.
+- `confidence_threshold` (float): Minimum probability required to return a gesture label. Default is 0.5.
+
+#### Method: `predict`
+
+```python
+gesture, probs = recognizer.predict(image)
+```
+
+- `image` (np.ndarray or PIL.Image): Input image (BGR/RGB or PIL.Image).
+- Returns:
+  - `gesture` (str or None): Predicted gesture label, or None if below threshold.
+  - `probs` (dict): Dictionary mapping gesture labels to probabilities for all classes.
+
+**Note:**
+
+- The model predicts only one gesture per image.
+- No hand keypoints or bounding boxes are returned.
+
 ## License
 
 See LICENSE file for details.
