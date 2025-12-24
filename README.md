@@ -700,6 +700,48 @@ gesture, probs = recognizer.predict(image)
 - The model predicts only one gesture per image.
 - No hand keypoints or bounding boxes are returned.
 
+## MotionDetection API
+
+### Class: `FrameDifferenceMotionDetector`
+
+Detects moving regions in a video stream by comparing consecutive frames. Returns a motion mask, bounding boxes, contours, and motion vectors for each detected region.
+
+#### Motion Vector Visualization
+
+In motion mode, for each detected moving region, the average motion direction is calculated using optical flow and visualized as an arrow (motion vector) on the video stream. This helps to intuitively understand the direction and strength of movement in real time.
+
+#### Initialization
+
+```python
+detector = FrameDifferenceMotionDetector(threshold=30, min_area=500)
+```
+
+- `threshold` (int): Pixel intensity threshold for motion detection.
+- `min_area` (int): Minimum area (in pixels) for a region to be considered as motion.
+
+#### Method: `detect`
+
+```python
+result = detector.detect(frame)
+```
+
+- `frame` (np.ndarray): Input video frame (BGR).
+- Returns:
+  - `motion_mask` (np.ndarray): Binary mask of detected motion.
+  - `motion_bbox` (list): List of bounding boxes for moving regions.
+  - `motion_contours` (list): List of contours for moving regions.
+  - `motion_vectors` (list): List of motion vectors (center, direction) for each region.
+
+#### MotionDetectionApp
+
+The `motion_detection_app.py` demo visualizes moving regions and their motion vectors in real time. Press `1` to enable motion visualization mode (mask + arrows), `0` for normal video, and `ESC` to exit.
+
+**Example usage:**
+
+```bash
+python motion_detection_app.py
+```
+
 ## License
 
 See LICENSE file for details.
