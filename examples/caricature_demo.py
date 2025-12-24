@@ -10,8 +10,8 @@ if __name__ == "__main__":
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     
-    input_path = "assets/images/photo1.jpg"
-    output_path = "assets/images/caricature_result.jpg"
+    input_path = "../assets/images/photo1.jpg"
+    output_path = "../assets/images/caricature_result.jpg"
     
     if not os.path.exists(input_path):
         print(f"Error: {input_path} not found")

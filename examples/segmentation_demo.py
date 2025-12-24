@@ -90,7 +90,7 @@ if __name__ == "__main__":
     )
     _logger = logging.getLogger('SegmentationDemo')
 
-    BACKGROUND_PATH = "assets/images/background.jpg"
+    BACKGROUND_PATH = "../assets/images/background.jpg"
     
     app = SegmentationDemoApp(background_path=BACKGROUND_PATH, is_flip=True, logger=_logger)
     app.run()

@@ -45,25 +45,37 @@ python main.py
 **Run AR face effects demo:**
 
 ```bash
-python face_ar_demo.py
+python examples/face_ar_demo.py
 ```
 
 **Run background segmentation demo:**
 
 ```bash
-python segmentation_demo.py
+python examples/segmentation_demo.py
 ```
 
 **Run style effects demo:**
 
 ```bash
-python style_effects_demo.py
+python examples/style_effects_demo.py
 ```
 
 **Run face contour demo:**
 
 ```bash
-python face_contour_demo.py
+python examples/face_contour_demo.py
+```
+
+**Run caricature generator demo:**
+
+```bash
+python examples/caricature_demo.py
+```
+
+**Run motion detection demo:**
+
+```bash
+python examples/motion_detection_app.py
 ```
 
 Press `ESC` to exit any demo.
@@ -413,7 +425,7 @@ result = bg_effect.apply(frame, mask)
 Run interactive demo with multiple visualization modes:
 
 ```bash
-python segmentation_demo.py
+python examples/segmentation_demo.py
 ```
 
 **Controls:**
@@ -566,7 +578,7 @@ Transform video frames into artistic styles in real-time. All effects support re
 ### Running Style Effects Demo
 
 ```bash
-python style_effects_demo.py
+python examples/style_effects_demo.py
 ```
 
 **Controls:**
@@ -612,7 +624,7 @@ Combines person segmentation, bilateral filtering, and adaptive thresholding to 
 ### Running
 
 ```bash
-python face_contour_demo.py
+python examples/face_contour_demo.py
 ```
 
 ### Configuration
@@ -662,7 +674,7 @@ cv2.imwrite('assets/images/result.jpg', result)
 ### Running Demo
 
 ```bash
-python caricature_demo.py
+python examples/caricature_demo.py
 ```
 
 **Note:** First run downloads ~6GB model.
@@ -739,7 +751,7 @@ The `motion_detection_app.py` demo visualizes moving regions and their motion ve
 **Example usage:**
 
 ```bash
-python motion_detection_app.py
+python examples/motion_detection_app.py
 ```
 
 ## License

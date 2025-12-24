@@ -65,12 +65,12 @@ if __name__ == "__main__":
     _logger = logging.getLogger('FaceAR')
 
     _effects = [
-        FrameEffect(image_path="assets/images/new_year_frame.png", logger=_logger),
+        FrameEffect(image_path="../assets/images/new_year_frame.png", logger=_logger),
         # HatEffect(image_path="assets/images/santa_hat.png", scale_factor=2.2, x_offset=0.0, y_offset=-0.5,
         #           logger=_logger),
-        FullFaceMaskEffect(image_path="assets/images/santa.png", scale_factor=1.7, x_offset=0.03, y_offset=0.13,
+        FullFaceMaskEffect(image_path="../assets/images/santa.png", scale_factor=1.7, x_offset=0.03, y_offset=0.13,
                            logger=_logger),
-        GlassesEffect(image_path="assets/images/glasses.png", scale_factor=1.8, logger=_logger),
+        GlassesEffect(image_path="../assets/images/glasses.png", scale_factor=1.8, logger=_logger),
     ]
     
     app = FaceARApp(effects=_effects, is_flip=True, logger=_logger)
