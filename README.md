@@ -754,6 +754,43 @@ The `motion_detection_app.py` demo visualizes moving regions and their motion ve
 python examples/motion_detection_app.py
 ```
 
+## Color Segmentation Demo
+
+Segments an image into N dominant colors using KMeans clustering. This demo simplifies an image by reducing its color palette, which can be used for stylization or preprocessing.
+
+**How to use:**
+
+1. Set the input image path and number of colors in `examples/color_segmentation_demo.py`:
+
+   ```python
+   _img_path_in = "../assets/images/background.jpg"
+   _img_path_out = "../assets/images/segmented_output.jpg"
+   _n_colors = 5
+   _segmenter = ColorSegmentation(image_path=_img_path_in, n_colors=_n_colors)
+   segmented_img = _segmenter.segment()
+   cv2.imwrite(_img_path_out, segmented_img)
+   ```
+
+2. Run the script:
+
+   ```bash
+   python examples/color_segmentation_demo.py
+   ```
+
+The output image will be saved to the specified path.
+
+**Requirements:**
+
+- scikit-learn
+- numpy
+- opencv-python
+
+Install with:
+
+```bash
+pip install scikit-learn numpy opencv-python
+```
+
 ## License
 
 See LICENSE file for details.
