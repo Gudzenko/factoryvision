@@ -791,6 +791,52 @@ Install with:
 pip install scikit-learn numpy opencv-python
 ```
 
+---
+
+## Hidden Area Effects
+
+Anonymization effects for masking or obscuring specific regions in images. All effects support both mask-based and contour-based input.
+
+### Available Effects
+
+| Effect          | Description                              | Key Parameter         | Anonymization Level |
+| --------------- | ---------------------------------------- | --------------------- | ------------------- |
+| **Blur**        | Gaussian blur for soft anonymization     | `size` (31-101)       | ⭐⭐⭐              |
+| **Mosaic**      | Pixelated blocks with average color      | `size` (20-50)        | ⭐⭐⭐⭐⭐          |
+| **Solid Color** | Complete fill with single color          | `color` (BGR tuple)   | ⭐⭐⭐⭐⭐          |
+| **Noise**       | Random color noise pattern               | `intensity` (0-255)   | ⭐⭐⭐⭐⭐          |
+| **Bar**         | Alternating colored bars (TV censorship) | `bar_width`, `colors` | ⭐⭐⭐⭐⭐          |
+
+### Usage Example
+
+```python
+from hidden_area_effects import BlurHiddenAreaEffect, MosaicHiddenAreaEffect
+from background_effects.person_segmentation import PersonSegmentation
+
+# Initialize
+segmenter = PersonSegmentation()
+effect = MosaicHiddenAreaEffect(size=30)
+
+# Apply to person contours
+contours = segmenter.get_contours(frame)
+for contour in contours:
+    frame = effect.apply_contour(frame, contour)
+
+# Or apply with mask
+mask = segmenter.get_binary_mask(frame)
+frame = effect.apply(frame, mask)
+```
+
+### Demo
+
+```bash
+python examples/blur_face_demo.py
+```
+
+Switch effects by editing the import in `blur_face_demo.py`.
+
+---
+
 ## License
 
 See LICENSE file for details.
